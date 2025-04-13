@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MY READING</title>
+    <link rel="stylesheet" href="styling.css">
+</head>
+<body>
+    <header>
+        <h1 class="title">WELCOME TO TANU'S READING</h1>
+        <p class="subtitle">YOU DESERVE TO LISTEN</p>
+    </header>
+    
+    <div class="intro-box">
+        <p class="intro-text">I will guide you through this mystical world of Tarot. Pick a card and I will tell your destiny.</p>
+        <h2 class="pick-card">PICK YOUR CARD</h2> 
+        <button class="shuffle-button" onclick="shuffleCards()">Shuffle Cards</button>
+        
+        <div class="tarot-back" id="tarotback">
+            <!-- 8 Card Slots -->
+            <div class="card"><img src="D:\\tanu html files\\images\\1.jpg" alt="tarot"></div>
+            <div class="card"><img src="D:\\tanu html files\\images\\1.jpg" alt="tarot"></div>
+            <div class="card"><img src="D:\\tanu html files\\images\\1.jpg" alt="tarot"></div>
+            <div class="card"><img src="D:\\tanu html files\\images\\1.jpg" alt="tarot"></div>
+            <div class="card"><img src="D:\\tanu html files\\images\\1.jpg" alt="tarot"></div>
+            <div class="card"><img src="D:\\tanu html files\\images\\1.jpg" alt="tarot"></div>
+            <div class="card"><img src="D:\\tanu html files\\images\\1.jpg" alt="tarot"></div>
+            <div class="card"><img src="D:\\tanu html files\\images\\1.jpg" alt="tarot"></div>
+        </div>
+    </div>
+    
+    <script>
+        const tarotImages = [
+            { img: "D:\\tanu html files\\images\\tarotcards.jpg", meaning: "You are experiencing a moment of clarity and happiness. Embrace success and positivity!" },
+            { img: "D:\\tanu html files\\images\\thekingofswords.jpg", meaning: "You are in a phase where logic and clear thinking guide your actions. Trust your wisdom." },
+            { img: "D:\\tanu html files\\images\\thelovers.jpg", meaning: "A major choice in your relationships or personal life is coming. Follow your heart but think   wisely." },
+            { img: "D:\\tanu html files\\images\\themoon.jpg", meaning: "Confusion surrounds you. Things may not be as they seem—trust your intuition." },
+            { img: "D:\\tanu html files\\images\\thetemperance.jpg", meaning: "You are seeking balance and harmony in life. Patience and moderation will bring you peace." },
+            { img: "D:\\tanu html files\\images\\thewheeloffortune.jpg", meaning: "Change is happening! Whether good or bad, remember that every phase is temporary." },
+            { img: "D:\\tanu html files\\images\\theworld.jpg", meaning: "You are at a moment of completion. Something you've been working on is reaching fulfillment." },
+            { img: "D:\\tanu html files\\images\\thestrength.jpg", meaning: "You have more inner strength than you realize. You will overcome challenges with patience and courage." }
+        ];
+
+        function shuffleCards() {
+            let container = document.getElementById("tarotback");
+            let cards = Array.from(container.children);
+
+            cards.forEach(card => {
+                let randomOffset = Math.random() * 100 - 50;
+                card.style.transform = `translateX(${randomOffset}px) rotate(${randomOffset / 5}deg)`;
+            });
+
+            setTimeout(() => {
+                for (let i = cards.length - 1; i > 0; i--) {
+                    let j = Math.floor(Math.random() * (i + 1));
+                    container.appendChild(cards[j]);
+                }
+                cards.forEach(card => {
+                    card.style.transform = "translateX(0) rotate(0deg)";
+                    card.querySelector("img").src = "1.jpg";
+                    card.classList.remove("flipped");
+                });
+            }, 500);
+        }
+
+        function revealCard(card) {
+            if (!card.classList.contains("flipped")) {
+                card.classList.add("flipped");
+                let randomIndex = Math.floor(Math.random() * tarotImages.length);
+                let selectedCard = tarotImages[randomIndex];
+                
+                setTimeout(() => {
+                    card.querySelector("img").src = selectedCard.img;
+                    showCardMeaning(selectedCard.img, selectedCard.meaning);
+                }, 300);
+            }
+        }
+
+        function showCardMeaning(image, meaning) {
+            let displayBox = document.createElement("div");
+            displayBox.classList.add("card-display");
+            displayBox.innerHTML = `
+                <div class="popup">
+                    <img src="${image}" alt="Tarot Card" class="big-card">
+                    <p class="card-meaning">${meaning}</p>
+                    <button class="close-btn" onclick="this.parentElement.parentElement.remove()">Close</button>
+                </div>
+            `;
+            document.body.appendChild(displayBox);
+        }
+
+        document.querySelectorAll(".card").forEach(card => {
+            card.addEventListener("click", function() {
+                revealCard(this);
+            });
+        });
+    </script>
+</body>
+</html>
+
+
+
